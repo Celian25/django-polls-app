@@ -1,18 +1,80 @@
 {% extends "base.html" %}
 
 {% block title %}<title>Результаты опросов</title>{% endblock title %}
+{% block links %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>{% endblock links %}
 
 {% block content %}
 <section>
-    <h3>Список результатов:</h3>
-    {% if results %}
-    <ul>
-    {% for question in results %}
-        <li><a href="{% url "results_page" question.id %}">{{ question.question_text }}</a></li>
+    <h3>Результаты опросов:</h3>
+    {% if data %}
+    {% for k,v in data.items %}
+    <article>
+        <header>
+            <a href="{% url "results_page" forloop.counter %}">{{ k }}</a>
+        </header>
+        <section class="container">
+            <canvas id="chart{{ forloop.counter }}"></canvas>
+        </section>
+    </article>    
     {% endfor %}
-    </ul>
     {% else %}
     <p>Пока еще нет результатов опросов</p>
     {% endif %}
 </section>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+  {% for k, v in data.items %}
+  const ctx{{ forloop.counter }} = document.getElementById('chart{{ forloop.counter }}');
+  
+  let xValues{{ forloop.counter }} = [{% for item in v %}"{{item.title}}"{% if not forloop.last %},{% endif %}{% endfor %}];
+  const yValues{{ forloop.counter }} = [{% for item in v %}{{item.votes}}{% if not forloop.last %},{% endif %}{% endfor %}];
+  const barColors{{ forloop.counter }} = ['rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'];
+  const borderColors{{ forloop.counter }} = ['rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)']
+  
+  xValuesShort{{ forloop.counter }} = xValues{{ forloop.counter }}.map((el) => el.length > 14 ? el.slice(0,6) + '...' : el)
+  new Chart(ctx{{ forloop.counter }}, {
+    type: "bar",
+    data: {
+        labels: xValuesShort{{ forloop.counter }},
+        datasets: [{
+        backgroundColor: barColors{{ forloop.counter }},
+        borderColor: borderColors{{ forloop.counter }},
+        borderWidth: 1,
+        data: yValues{{ forloop.counter }}
+        }]
+    },
+        options: {
+        responsive: true,
+        scales: {
+                    y: {
+                        ticks: {
+                            callback: function (value) {
+                                return Math.floor(value);
+                            }
+                        }
+                    }
+                },
+        plugins: {
+        legend: {
+            display: false
+        },
+        tooltip: {
+            callbacks: {
+                title: (context) => xValues{{ forloop.counter }}[context[0].dataIndex]
+        },},}
+},});
+  {% endfor %}
+</script>
+{% endblock scripts %}

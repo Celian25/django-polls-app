@@ -6,13 +6,14 @@
 <section>
     <h3>Список всех вопросов:</h3>
     {% if questions %}
-    <ul>
     {% for question in questions %}
-        <li><a href="{% url "detail_page" question.id %}">{{ question.question_text }}</a></li>
+    <article>
+        <header>{{ question.question_text }}</header>
+        <a href="{% url "detail_page" question.id %}">Перейти к опросу..</a>
+    </article>
     {% endfor %}
-    </ul>
     {% else %}
-    <p>No polls are available.</p>
+    <p>Пока нет доступных опросов</p>
     {% endif %}
 </section>
 {% endblock content %}

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block title %}{% endblock title %}
     {% block links %}{% endblock links %}
-    <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.cyan.min.css">
+    <link rel="stylesheet" href="{% static "polls/pico.indigo.min.css" %}">
+    <link rel="shortcut icon" href="{% static "polls/favicon.ico" %}" type="image/x-icon">
 </head>
 <body>
     <header class="container">
@@ -17,7 +17,7 @@
         </ul>
         <ul>
             <li><a href="{% url "index_page" %}">Вопросы</a></li>
-            <li><a href="{% url "results_list_page" %}">Результаты</a></li>
+            <li><a href="{% url "results_list_page" %}">Статистика</a></li>
         </ul>
         </nav>
     </header>
