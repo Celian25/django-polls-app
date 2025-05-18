@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Результаты опросов</title>{% endblock title %}
+
+{% block content %}
+<section>
+    <h3>Список результатов:</h3>
+    {% if results %}
+    <ul>
+    {% for question in results %}
+        <li><a href="{% url "results_page" question.id %}">{{ question.question_text }}</a></li>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <p>Пока еще нет результатов опросов</p>
+    {% endif %}
+</section>
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load polls_extras %}
+
+{% block title %}<title>Результаты по - {{question.question_text}}</title>{% endblock title %}
+
+{% block content %}
+<h1>{{ question.question_text }}</h1>
+
+<ul>
+{% for choice in question.choices.all %}
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} {{ choice.votes|ru_plural:"голос,голоса,голосов" }}</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'detail_page' question.id %}">Проголосуем еще раз?</a>
+{% endblock content %}
