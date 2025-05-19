@@ -11,7 +11,7 @@ class ChoiceInline(admin.StackedInline):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ["question_text", "pub_date"]
+    list_display = ["question_text", "pub_date", "published_recently"]
     search_fields = ["question_text"]
     list_filter = ["pub_date"]
     fieldsets = [
